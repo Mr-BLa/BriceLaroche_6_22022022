@@ -1,29 +1,54 @@
 //import express
 const express = require("express")
 
+// import mangoose
+const mongoose = require('mongoose')
+
+//Connexion MongoDB-Atlas
+const { MongoClient } = require('mongodb')
+const uri = "mongodb+srv://hot-takes:hottakes1@cluster0.5q2kg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+client.connect(err => {
+    const collection = client.db("test").collection("devices")
+    // perform actions on the collection object
+    client.close()
+})
+
 // création application express
 const app = express()
 
 
-// Application utilisera ces fonctions pour tout types de requête
-app.use((req, res, next) =>{
+/*
+**  Application utilisera ces fonctions pour tout types de requête
+*/
+
+
+//Pour gérer la requête POST venant de l'application front-end, on a besoin d'en extraire le corps JSON
+app.use(express.json())
+
+
+//Middleware général, pour permettre  l'app, d'accéder  l'API sans problèmes
+app.use((req, res, next) => {
+    //accéder à notre API depuis n'importe quelle origine ( '*' )
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    //ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.)
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization')
+    //envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.)
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+    next()
+})
+
+app.post('/api/sauces', (req, res, next) => {
+    console.log(req.body)
+    res.status(201).json({
+        message: 'Objet créé !'
+    })
+})
+
+app.get("/api/sauces", (req, res, next) =>{
     console.log("requête reçue!")
-    next()
 })
 
-app.use((req, res, next) =>{
-    res.status(201)
-    next()
-})
-
-app.use((req, res, next) =>{
-    res.json({message: "Votre requête a bien été reçue !"})
-    next()
-})
-
-app.use((res, req) =>{
-    console.log("réponse envoyée avec succès !")
-})
 
 //exportation cette app, pour qu'on puisse y accéder depuis d'autres fichiers (notamment node)
 module.exports = app
