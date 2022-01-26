@@ -40,11 +40,17 @@ app.use((req, res, next) => {
 })
 
 app.post('/api/sauces', (req, res, next) => {
+    //Retire le champ id renvoyé par mongoDb, avant de le copier
+    delete req.body._id
     //créaton nouvelle instance de notre model Sauce
     const sauce = new Sauce({
-        //copie les champs de Sauce, dans le body/corps de la request
+        //copie les champs du model Sauce, dans le body/corps de la request
         ...req.body
     })
+    //enregistrement du "sauce" dans la base de données
+    sauce.save()
+        .then(() => res.status(201).json({ message: "Objet Enregistré !"}))
+        .catch(error => res.status(400).json({ error }))
 })
 
 app.get("/api/sauces", (req, res) =>{
