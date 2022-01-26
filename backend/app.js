@@ -8,7 +8,7 @@ const express = require("express")
 const mongoose = require('mongoose')
 
 //Import mongoose schema Sauce
-const Sauce = require('./models/Sauce');
+const Sauce = require('./models/Sauce')
 
 //Connexion MongoDB-Atlas
 const { MongoClient } = require('mongodb')
@@ -53,6 +53,16 @@ app.post('/api/sauces', (req, res, next) => {
         .then(() => res.status(201).json({ message: "Objet Enregistré !"}))
         .catch(error => res.status(400).json({ error }))
 })
+
+
+
+app.get('/api/sauces/:id', (req, res, next) =>{
+    //Trouver un seul objet dans la base de données. Via objet req.param.id (car c'est un paramètre de route dynamique)
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => res.status(200).json(thing))
+        .catch(error => res.status(404).json({ error }))
+})
+
 
 app.get("/api/sauces", (req, res) =>{
     //renvoyer un tableau contenant toutes les Sauces
