@@ -1,3 +1,7 @@
+/*
+**  Application utilisera ces fonctions pour tout types de requête
+*/
+
 // Import express
 const express = require("express")
 // Import mongoose
@@ -20,9 +24,6 @@ client.connect(err => {
 const app = express()
 
 
-/*
-**  Application utilisera ces fonctions pour tout types de requête
-*/
 
 //Pour gérer la requête POST venant de l'application front-end, on a besoin d'en extraire le corps JSON
 app.use(express.json())
@@ -42,7 +43,7 @@ app.use((req, res, next) => {
 app.post('/api/sauces', (req, res, next) => {
     //Retire le champ id renvoyé par mongoDb, avant de le copier
     delete req.body._id
-    //créaton nouvelle instance de notre model Sauce
+    //création nouvelle instance de notre model Sauce
     const sauce = new Sauce({
         //copie les champs du model Sauce, dans le body/corps de la request
         ...req.body
@@ -54,7 +55,10 @@ app.post('/api/sauces', (req, res, next) => {
 })
 
 app.get("/api/sauces", (req, res) =>{
-    console.log("requête reçue!")
+    //renvoyer un tableau contenant toutes les Sauces
+    Sauce.find()
+        .then(sauces => res.status(200).json(sauces))
+        .catch(error => res.status(400).json({ error }))
 })
 
 
