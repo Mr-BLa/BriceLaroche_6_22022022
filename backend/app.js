@@ -1,8 +1,10 @@
-//import express
+// Import express
 const express = require("express")
-
-// import mangoose
+// Import mongoose
 const mongoose = require('mongoose')
+
+//Import mongoose schema Sauce
+const Sauce = require('./models/Sauce');
 
 //Connexion MongoDB-Atlas
 const { MongoClient } = require('mongodb')
@@ -22,7 +24,6 @@ const app = express()
 **  Application utilisera ces fonctions pour tout types de requête
 */
 
-
 //Pour gérer la requête POST venant de l'application front-end, on a besoin d'en extraire le corps JSON
 app.use(express.json())
 
@@ -39,13 +40,14 @@ app.use((req, res, next) => {
 })
 
 app.post('/api/sauces', (req, res, next) => {
-    console.log(req.body)
-    res.status(201).json({
-        message: 'Objet créé !'
+    //créaton nouvelle instance de notre model Sauce
+    const sauce = new Sauce({
+        //copie les champs de Sauce, dans le body/corps de la request
+        ...req.body
     })
 })
 
-app.get("/api/sauces", (req, res, next) =>{
+app.get("/api/sauces", (req, res) =>{
     console.log("requête reçue!")
 })
 

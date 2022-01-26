@@ -1,11 +1,11 @@
 const mongoose = require("mongoose")
 
-const saucesSchema = mongoose.Schema({
+const sauceSchema = mongoose.Schema({
     //l'identifiant MongoDB unique de l'utilisateur qui a créé la sauce
-    userId : { type: String, required: true },
+    userId : { type: String, required: true},
 
     //nom de la sauce
-    name : { type: String, required: true },
+    name : { type: String, required: true},
 
     //fabricant de la sauce
     manufacturer : {type: String, required: true},
@@ -29,8 +29,11 @@ const saucesSchema = mongoose.Schema({
     dislikes : {type: Number , required: true},
 
     //tableau des identifiants des utilisateurs qui ont aimé (= liked) la sauce
-    usersLiked : {type: [ "String <userId>" ]},
+    usersLiked : {type: [ "String <userId>" ], required: true},
 
     //tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce
-    usersDisliked : {type: [ "String <userId>" ]}
+    usersDisliked : {type: [ "String <userId>" ], required: true}
 })
+
+
+module.exports = mongoose.model('Sauce', sauceSchema);
