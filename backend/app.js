@@ -55,6 +55,12 @@ app.post('/api/sauces', (req, res, next) => {
 })
 
 
+app.put('/api/sauces/:id', (req, res, next) => {
+    // Mettre à jour/ modifier une sauce dans la base de données, en fonction de l'id
+    Sauce.updateOne({ _id: req.params.id }, {...req.body, _id: req.params.id })
+        .then(() => res.status(200).json({ message: "Objet Modifié !"}))
+        .catch(error => res.status(400).json({ error }))
+})
 
 app.get('/api/sauces/:id', (req, res, next) =>{
     //Trouver un seul objet dans la base de données. Via objet req.param.id (car c'est un paramètre de route dynamique)
