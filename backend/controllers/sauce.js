@@ -52,7 +52,7 @@ exports.getOneSauce = (req, res, next) =>{
 
 
 //Controller GET
-exports.getSauce = (req, res) =>{
+exports.getAllSauces = (req, res) =>{
     //renvoyer un tableau contenant toutes les Sauces
     Sauce.find()
         .then(sauces => res.status(200).json(sauces))

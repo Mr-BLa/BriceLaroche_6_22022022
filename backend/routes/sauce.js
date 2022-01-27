@@ -3,7 +3,6 @@
 */
 
 
-
 //Implémentation des routes 
 const express = require('express')
 const router = express.Router()
@@ -25,7 +24,7 @@ router.delete('/:id', sauceCtrl.deleteSauce )
 router.get('/:id', sauceCtrl.getOneSauce)
 
 //Router GET + import et application Controller GET
-router.get("/", sauceCtrl.getSauce)
+router.get("/", sauceCtrl.getAllSauces)
 
 
 module.exports = router
