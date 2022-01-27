@@ -4,11 +4,12 @@
 
 // Import express
 const express = require("express")
+
 // Import mongoose
 const mongoose = require('mongoose')
 
-//Import mongoose schema Sauce
-const Sauce = require('./models/Sauce')
+//Import router
+const sauceRoutes = require('./routes/sauce')
 
 //Connexion MongoDB-Atlas
 const { MongoClient } = require('mongodb')
@@ -39,6 +40,10 @@ app.use((req, res, next) => {
 
 //Pour gérer la requête POST venant de l'application front-end, on a besoin d'en extraire le corps JSON
 app.use(express.json())
+
+
+//Pour la route "/api/sauce", on utilise sauceRoutes (donc le router)
+app.use('/api/sauce', sauceRoutes)
 
 
 //exportation cette app, pour qu'on puisse y accéder depuis d'autres fichiers (notamment node)
