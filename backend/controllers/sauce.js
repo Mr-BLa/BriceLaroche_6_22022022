@@ -4,7 +4,6 @@
 
 
 //Import mongoose schema Sauce
-const { prependListener } = require("../app")
 const Sauce = require("../models/Sauce")
 
 

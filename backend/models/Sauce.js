@@ -1,5 +1,5 @@
 /*
-*       MODEL/SCHEMA
+*       MODELS/SCHEMA
 */
 
 
