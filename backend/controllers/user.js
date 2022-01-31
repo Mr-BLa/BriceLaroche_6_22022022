@@ -29,7 +29,34 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({ error }))
 }
 
+
 // Connecter utilisateurs existants
 exports.login = (req, res, next) => {
+    // Retrouver le mail dans la BDD
+    User.findOne({ email: req.body.email })
+    // Vérifier si on a trouvé un user
+    .then(user => {
 
+        // Si l'on n'a pas trouvé de user
+        if (!user) {
+            return res.status(401).json({ error: 'Utilisateur non trouvé !' })
+        }
+
+        // Si on a trouvé un user: on compare le mdp envoyé par la requête, avec le mdp hash enregistré dans notre user
+        bcrypt.compare(req.body.password, user.password)
+            .then(valid => {
+                // Si Mdp incorrect
+                if (!valid) {
+                return res.status(401).json({ error: 'Mot de passe incorrect !' })
+                }
+                // Si Mdp correct, renvoyer un user._id + un token
+                res.status(200).json({
+                userId: user._id,
+                token: 'TOKEN'
+                })
+            })
+            .catch(error => res.status(500).json({ error }))
+    })
+    
+    .catch(error => res.status(500).json({ error }))
 }
