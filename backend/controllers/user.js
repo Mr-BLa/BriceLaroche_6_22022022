@@ -5,6 +5,9 @@
 // Import package bcrypt
 const bcrypt = require('bcrypt')
 
+// Import package jsonWebToken
+const jwt = require('jsonwebtoken')
+
 // Import Model User
 const User = require('../models/User')
 
@@ -51,12 +54,22 @@ exports.login = (req, res, next) => {
                 }
                 // Si Mdp correct, renvoyer un user._id + un token
                 res.status(200).json({
-                userId: user._id,
-                token: 'TOKEN'
+                    userId: user._id,
+                    // Utilisation jwt: création et vérification de token
+                    token: jwt.sign(
+                        // Payload: données que l'on veut encoder à l'intérieur du token:
+
+                        // Objet avec l'userId qui est l'identifiant utilisateur (donc vérification que la requête correspond bien à l'userId)
+                        { userId: user._id },
+                        // Clé secrète pour encodage
+                        "RANDOM_TOKEN_SECRET",
+                        // Expiration du TOKEN à 24h
+                        { expiresIn: "24h" }
+                    )
                 })
             })
             .catch(error => res.status(500).json({ error }))
     })
-    
+
     .catch(error => res.status(500).json({ error }))
 }
