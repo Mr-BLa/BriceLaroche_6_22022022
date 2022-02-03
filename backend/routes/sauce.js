@@ -11,10 +11,11 @@ const router = express.Router()
 const sauceCtrl = require("../controllers/sauce")
 // Import Middleware Authentification Token
 const auth = require("../middleware/auth")
-
+// Import Middleware multer-config
+const multer = require('../middleware/multer-config')
 
 // Router POST + import et application Controller POST
-router.post('/', auth, sauceCtrl.createSauce )
+router.post('/', auth, multer, sauceCtrl.createSauce )
 
 // Router PUT + import et application Controller PUT
 router.put('/:id', auth, sauceCtrl.modifySauce )

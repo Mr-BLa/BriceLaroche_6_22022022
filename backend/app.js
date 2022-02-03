@@ -8,6 +8,10 @@ const express = require("express")
 // Import mongoose
 const mongoose = require('mongoose')
 
+// Import de path (chemin de notre systeme de fichier)
+const path = require('path')
+
+
 // Import routers
 const sauceRoutes = require('./routes/sauce')
 const userRoutes = require('./routes/user')
@@ -42,6 +46,8 @@ app.use((req, res, next) => {
 // Pour gérer la requête POST venant de l'application front-end, on a besoin d'en extraire le corps JSON
 app.use(express.json())
 
+// Lors de requête /images, servir le dossier images
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 // Pour la route "/api/sauce", on utilise sauceRoutes (donc le router)
 app.use('/api/sauce', sauceRoutes)

@@ -9,12 +9,16 @@ const Sauce = require("../models/Sauce")
 
 //Controller POST
 exports.createSauce = (req, res, next) => {
+    // Objet Js sous forme de chaine caractere
+    const sauceObject = JSON.parse(req.body.sauce)
     //Retire le champ id renvoyé par mongoDb, avant de le copier
-    delete req.body._id
+    delete sauceObject._id
     //création nouvelle instance de notre model Sauce
     const sauce = new Sauce({
         //copie les champs du model Sauce, dans le body/corps de la request
-        ...req.body
+        ...sauceObject,
+        // Modification url de l'image
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
     //enregistrement du "sauce" dans la base de données
     sauce.save()
