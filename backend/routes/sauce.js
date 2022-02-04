@@ -18,7 +18,7 @@ const multer = require('../middleware/multer-config')
 router.post('/', auth, multer, sauceCtrl.createSauce )
 
 // Router PUT + import et application Controller PUT
-router.put('/:id', auth, sauceCtrl.modifySauce )
+router.put('/:id', auth, multer, sauceCtrl.modifySauce )
 
 // Router DELETE + import et application Controller DELETE
 router.delete('/:id', auth, sauceCtrl.deleteSauce )

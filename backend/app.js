@@ -19,12 +19,20 @@ const userRoutes = require('./routes/user')
 // Connexion MongoDB-Atlas
 const { MongoClient } = require('mongodb')
 const uri = "mongodb+srv://hot-takes:hottakes1@cluster0.5q2kg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+//Connexion à la base de données
+mongoose
+    .connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log('Connexion à la base de données établie'))
+    .catch((error) => console.log(error))
+/*const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 client.connect(err => {
     const collection = client.db("test").collection("devices")
     // perform actions on the collection object
     client.close()
-})
+})*/
 
 // Création application express
 const app = express()

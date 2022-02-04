@@ -11,24 +11,30 @@ const Sauce = require("../models/Sauce")
 exports.createSauce = (req, res, next) => {
     // Objet Js sous forme de chaine caractere
     const sauceObject = JSON.parse(req.body.sauce)
-    //Retire le champ id renvoyé par mongoDb, avant de le copier
+    // Retire le champ id renvoyé par mongoDb, avant de le copier
     delete sauceObject._id
-    //création nouvelle instance de notre model Sauce
+    // Création nouvelle instance de notre model Sauce
     const sauce = new Sauce({
-        //copie les champs du model Sauce, dans le body/corps de la request
+        // Copie les champs du model Sauce, dans le body/corps de la request
         ...sauceObject,
         // Modification url de l'image
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
-    //enregistrement du "sauce" dans la base de données
+    // Enregistrement du "sauce" dans la base de données
     sauce.save()
         .then(() => res.status(201).json({ message: "Objet Enregistré !"}))
         .catch(error => res.status(400).json({ error }))
 }
 
 
-//Controller PUT
+// Controller PUT
 exports.modifySauce = (req, res, next) => {
+    // 
+    const sauceObject = req.file ?
+    {
+        ...JSON.parse(req.body.thing),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body }
     // Mettre à jour/ modifier une sauce dans la base de données, en fonction de l'id
     Sauce.updateOne({ _id: req.params.id }, {...req.body, _id: req.params.id })
         .then(() => res.status(200).json({ message: "Objet Modifié !"}))
