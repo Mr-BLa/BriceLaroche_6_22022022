@@ -19,6 +19,7 @@ const userRoutes = require('./routes/user')
 // Connexion MongoDB-Atlas
 const { MongoClient } = require('mongodb')
 const uri = "mongodb+srv://hot-takes:hottakes1@cluster0.5q2kg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+
 //Connexion à la base de données
 mongoose
     .connect(uri, {
@@ -39,7 +40,7 @@ const app = express()
 
 
 
-// Middleware général, pour permettre  l'app, d'accéder  l'API sans problèmes
+// Middleware général, pour permettre à l'app, d'accéder à l'API sans problèmes
 app.use((req, res, next) => {
     //accéder à notre API depuis n'importe quelle origine ( '*' )
     res.setHeader('Access-Control-Allow-Origin', '*')

@@ -8,6 +8,15 @@ const http = require('http')
 // Import application 
 const app = require('./app')
 
+// Import pour bug CORS 
+const cors = require('cors')
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions))
+
 //renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
 const normalizePort = val => {
     const port = parseInt(val, 10)
