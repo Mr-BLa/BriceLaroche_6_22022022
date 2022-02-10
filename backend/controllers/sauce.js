@@ -6,6 +6,10 @@
 //Import mongoose schema Sauce
 const Sauce = require("../models/Sauce")
 
+// Import package File System (accès aux différentes opérations liées au système de fichier)
+const fs = require('fs')
+
+
 
 //Controller POST
 exports.createSauce = (req, res, next) => {
@@ -44,29 +48,48 @@ exports.modifySauce = (req, res, next) => {
 
 //Controller DELETE
 exports.deleteSauce = (req, res, next) => {
-    // S'assurer que l'utilisateur qui fait la requête est bien le propriétaire de l'objet qu'il souhaite supprimer
-    Thing.findOne({ _id: req.params.id }).then(
-        (sauce) => {
-            // Cas d'erreur: si sauce n'existe pas
-            if (!sauce) {
-                return res.status(404).json({
-                    error: new Error('Objet non trouvé !')
+    // S'assurer que l'utilisateur qui fait la requête est bien le propriétaire de l'objet avant de pouvoir supprimer
+    Thing.findOne({ _id: req.params.id })
+        .then(
+            (sauce) => {
+                // Cas d'erreur: si sauce n'existe pas
+                if (!sauce) {
+                    return res.status(404).json({
+                        error: new Error('Objet non trouvé !')
+                    })
+                }
+                // Vérification du userId 
+                if (sauce.userId !== req.auth.userId) {
+                    return res.status(401).json({
+                        error: new Error('Requête non autorisée !')
+                    })
+                }
+                // Retrouver le bon nom du fichier
+                const filename = sauce.imageUrl.split('/images/')[1]
+                // Supression du fichier
+                fs.unlink(`images/${filename}`, () => {
+                    //Si bon propriétaire: supprimer une sauce de la base de données, en fonction de l'id
+                    Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+                    .catch(error => res.status(400).json({ error }))
                 })
-            }
-            // Vérification du userId 
-            if (sauce.userId !== req.auth.userId) {
-                return res.status(401).json({
-                    error: new Error('Requête non autorisée !')
-                })
-            }
-            //Si bon propriétaire: supprimer une sauce de la base de données, en fonction de l'id
-            Sauce.deleteOne({ _id: req.params.id })
-            .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
-            .catch(error => res.status(400).json({ error }))
-        }
-    )
+            })
+        .catch(error => res.status(500).json({ error }))
 }
-
+/*
+*exports.deleteThing = (req, res, next) => {
+    Thing.findOne({ _id: req.params.id })
+        .then(thing => {
+            const filename = thing.imageUrl.split('/images/')[1]
+            fs.unlink(`images/${filename}`, () => {
+                Thing.deleteOne({ _id: req.params.id })
+                .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+                .catch(error => res.status(400).json({ error }))
+            })
+            })
+        .catch(error => res.status(500).json({ error }))
+}
+*/
 
 //Controller GET ONE
 exports.getOneSauce = (req, res, next) =>{
