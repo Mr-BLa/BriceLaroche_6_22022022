@@ -11,6 +11,8 @@ const mongoose = require('mongoose')
 // Import de path (chemin de notre systeme de fichier)
 const path = require('path')
 
+// Import CORS
+const cors = require('cors')
 
 // Import routers
 const sauceRoutes = require('./routes/sauce')
@@ -41,7 +43,7 @@ const app = express()
 
 
 // Middleware général, pour permettre à l'app, d'accéder à l'API sans problèmes
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     //accéder à notre API depuis n'importe quelle origine ( '*' )
     res.setHeader('Access-Control-Allow-Origin', '*')
     //ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.)
@@ -49,8 +51,8 @@ app.use((req, res, next) => {
     //envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.)
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
     next()
-})
-
+})*/
+app.use(cors())
 
 // Pour gérer la requête POST venant de l'application front-end, on a besoin d'en extraire le corps JSON
 app.use(express.json())
@@ -59,7 +61,7 @@ app.use(express.json())
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
 // Pour la route "/api/sauce", on utilise sauceRoutes (donc le router)
-app.use('/api/sauce', sauceRoutes)
+app.use('/api/sauces', sauceRoutes)
 
 // Pour la route "/api/auth", on utilise userRoutes
 app.use('/api/auth', userRoutes)

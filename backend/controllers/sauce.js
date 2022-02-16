@@ -49,7 +49,7 @@ exports.modifySauce = (req, res, next) => {
 //Controller DELETE
 exports.deleteSauce = (req, res, next) => {
     // S'assurer que l'utilisateur qui fait la requête est bien le propriétaire de l'objet avant de pouvoir supprimer
-    Thing.findOne({ _id: req.params.id })
+    Sauce.findOne({ _id: req.params.id })
         .then(
             (sauce) => {
                 // Cas d'erreur: si sauce n'existe pas
@@ -82,7 +82,7 @@ exports.deleteSauce = (req, res, next) => {
 exports.getOneSauce = (req, res, next) =>{
     //Trouver un seul objet dans la base de données. Via objet req.param.id (car c'est un paramètre de route dynamique)
     Sauce.findOne({ _id: req.params.id })
-        .then(sauce => res.status(200).json(thing))
+        .then(sauce => res.status(200).json(sauce))
         .catch(error => res.status(404).json({ error }))
 }
 
