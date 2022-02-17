@@ -10,6 +10,14 @@ const Sauce = require("../models/Sauce")
 const fs = require('fs')
 
 
+//Controller LIKE et DISLIKE
+exports.likeDislikeSauce = (req, res, next) => {
+    let like = req.body.like
+    let userId = req.body.userId
+    let sauceId = req.params.id
+    console.log(req.body)
+}
+
 
 //Controller POST
 exports.createSauce = (req, res, next) => {
