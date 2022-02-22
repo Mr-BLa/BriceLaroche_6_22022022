@@ -34,10 +34,10 @@ const sauceSchema = mongoose.Schema({
     dislikes : {type: Number , required: true},
 
     //tableau des identifiants des utilisateurs qui ont aimé (= liked) la sauce
-    usersLiked : {type: [ "String <userId>" ], required: true},
+    usersLiked : {type: [ String ], required: true},
 
     //tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce
-    usersDisliked : {type: [ "String <userId>" ], required: true}
+    usersDisliked : {type: [ String ], required: true}
 })
 
 

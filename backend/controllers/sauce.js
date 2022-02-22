@@ -15,6 +15,7 @@ exports.likeDislikeSauce = (req, res, next) => {
     let like = req.body.like
     let userId = req.body.userId
     let sauceId = req.params.id
+    //algorithme
     console.log(req.body)
 }
 
