@@ -10,12 +10,59 @@ const Sauce = require("../models/Sauce")
 const fs = require('fs')
 
 
-//Controller LIKE et DISLIKE
-exports.likeDislikeSauce = (req, res, next) => {
-    let like = req.body.like
+//Controller LIKE
+exports.createLikeSauce = (req, res, next) => {
+    // Objet Js sous forme de chaine caractere
+    const sauceObject = JSON.parse(req.body.sauce)
+    // Récupération état des likes/dislikes
+    let totalLikes = req.body.likes
+    let totalDislikes = req.body.dislikes
+    let usersLiked = req.body.usersLiked
+    let usersDisliked = req.body.usersDisliked
     let userId = req.body.userId
-    let sauceId = req.params.id
-    //algorithme
+
+    // S'assurer que l'utilisateur qui fait la requête est bien le propriétaire de l'objet
+    Sauce.findOne({ _id: req.params.id })
+        // Promise pour les différents cas: like (+1), dislike (-1) ou annulation like OU dislike (0)
+        .then((sauce) => {
+            switch (sauceObject) {
+                // Si Id de l'utilisateur n'est pas dans le tableau des personnes qui ont déjà liké et que Like = 1 DONC likes = +1 
+                case 1:
+                    if (!usersLiked.includes(userId) && totalLikes === 1) {
+                        console.log("userId absent de [usersLiked] et userId aime la sauce")
+        
+                        // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [likes] à 1 et de'$push' pour l'ajout de userId ds [usersLiked]
+                        Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: 1 }, $push: { usersLiked: userId } })
+                            .then(() => res.status(201).json({ message: "Sauce likée !" }))
+                            .catch(error => res.status(400).json({ error })) 
+                    }
+                    break
+                
+                // Si Id de l'utilisateur n'est pas dans le tableau des personnes qui ont déjà disliké et que Dislike = -1 DONC dislikes = -1 
+                case -1: 
+                    if (!usersDisliked.includes(userId) && totalDislikes === -1) {
+                        console.log("userId absent de [usersDisliked] et userId n'aime pas la sauce")
+        
+                        // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [dislikes] à -1 et de'$push' pour l'ajout de userId ds [usersDisliked]
+                        Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: -1 }, $push: { usersDisliked: userId } })
+                            .then(() => res.status(201).json({ message: "Sauce dislikée !" }))
+                            .catch(error => res.status(400).json({ error })) 
+                    }
+                    break
+
+                // Si Id de l'utilisateur est présent dans [usersLiked] ou [usersDisliked], et que le vote a été annulé, DONC likes et dislikes = 0
+                case 0: 
+                    if ((usersLiked.includes(userId) && totalLikes === 0) || (usersDisliked.includes(userId) && totalDislikes === 0)) {
+                        console.log("userId présent dans [usersLiked] ou [usersDisliked] et userId ne se prononce pas")
+        
+                        // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [dislikes] à -1 et de'$push' pour l'ajout de userId ds [usersDisliked]
+                        Sauce.updateOne({ _id: req.params.id }, { $inc: { likes, dislikes: 0 }, $pull: { usersLiked, usersDisliked: userId } })
+                            .then(() => res.status(201).json({ message: "Ne se prononce pas" }))
+                            .catch(error => res.status(400).json({ error })) 
+                    }
+                    break
+            }
+        })
 
     console.log(req.body)
 }
