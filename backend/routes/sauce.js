@@ -15,7 +15,7 @@ const auth = require("../middleware/auth")
 const multer = require('../middleware/multer-config')
 
 // Router LIKE et DISLIKE 
-router.post('/:id/like', auth, sauceCtrl.likeDislikeSauce)
+router.post('/:id/like', auth, sauceCtrl.createLikeSauce)
 
 // Router POST + import et application Controller POST
 router.post('/', auth, multer, sauceCtrl.createSauce )

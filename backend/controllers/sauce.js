@@ -13,7 +13,7 @@ const fs = require('fs')
 //Controller LIKE
 exports.createLikeSauce = (req, res, next) => {
     // Objet Js sous forme de chaine caractere
-    const sauceObject = JSON.parse(req.body.sauce)
+    let sauceObject = JSON.parse(req.body.sauce)
     // Récupération état des likes/dislikes
     let totalLikes = req.body.likes
     let totalDislikes = req.body.dislikes
@@ -24,7 +24,7 @@ exports.createLikeSauce = (req, res, next) => {
     // S'assurer que l'utilisateur qui fait la requête est bien le propriétaire de l'objet
     Sauce.findOne({ _id: req.params.id })
         // Promise pour les différents cas: like (+1), dislike (-1) ou annulation like OU dislike (0)
-        .then((sauce) => {
+        .then(() => {
             switch (sauceObject) {
                 // Si Id de l'utilisateur n'est pas dans le tableau des personnes qui ont déjà liké et que Like = 1 DONC likes = +1 
                 case 1:
@@ -63,7 +63,7 @@ exports.createLikeSauce = (req, res, next) => {
                     break
             }
         })
-
+        .catch(error => res.status(500).json({ error }))
     console.log(req.body)
 }
 
