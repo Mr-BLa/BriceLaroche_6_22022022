@@ -16,7 +16,6 @@ exports.createLikeSauce = (req, res, next) => {
     // Récupération état des likes/dislikes
     let like = req.body.like
     let userId = req.body.userId
-    console.log(req.body)
     // S'assurer que l'utilisateur qui fait la requête est bien le propriétaire de l'objet
     Sauce.findOne({ _id: req.params.id })
         // Promise pour les différents cas: like (+1), dislike (-1) ou annulation like OU dislike (0)
@@ -77,6 +76,7 @@ exports.createLikeSauce = (req, res, next) => {
 exports.createSauce = (req, res, next) => {
     // Objet Js sous forme de chaine caractere
     const sauceObject = JSON.parse(req.body.sauce)
+    console.log(req.body.sauce)
     // Retire le champ id renvoyé par mongoDb, avant de le copier
     delete sauceObject._id
     // Création nouvelle instance de notre model Sauce

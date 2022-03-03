@@ -28,16 +28,16 @@ const sauceSchema = mongoose.Schema({
     heat : {type: Number, required: true}, 
 
     //nombre d'utilisateurs qui aiment (= likent) la sauce
-    likes : {type: Number, required: true}, 
+    likes : {type: Number}, 
 
     //nombre d'utilisateurs qui n'aiment pas (= dislike) la sauce
-    dislikes : {type: Number , required: true},
+    dislikes : {type: Number},
 
     //tableau des identifiants des utilisateurs qui ont aimé (= liked) la sauce
-    usersLiked : {type: [ String ], required: true},
+    usersLiked : {type: [ String ]},
 
     //tableau des identifiants des utilisateurs qui n'ont pas aimé (= disliked) la sauce
-    usersDisliked : {type: [ String ], required: true}
+    usersDisliked : {type: [ String ]}
 })
 
 
