@@ -51,7 +51,7 @@ const errorHandler = error => {
 }
 
 
-// Appel méthode createServer du package http. Cette methode prend comme argument, la fonction qui sera appeler à chaque reçue par le serveur
+// Appel méthode createServer du package http. Cette methode prend comme argument, la fonction qui sera appeler à chaque requête reçue par le serveur
 const server = http.createServer(app)
 
 server.on('error', errorHandler)
