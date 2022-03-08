@@ -27,9 +27,9 @@ exports.signup = (req, res, next) => {
             //... qu'on enregistre dans la BDD
             user.save()
                 .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-                .catch(error => res.status(400).json({ error }))
+                .catch(error => res.status(400).json( error ))
         })
-        .catch(error => res.status(500).json({ error }))
+        .catch(error => res.status(500).json( error ))
 }
 
 
@@ -42,7 +42,7 @@ exports.login = (req, res, next) => {
 
         // Si l'on n'a pas trouvé de user
         if (!user) {
-            return res.status(401).json({ error: 'Utilisateur non trouvé !' })
+            return res.status(401).json( 'Utilisateur non trouvé !' )
         }
 
         // Si on a trouvé un user: on compare le mdp envoyé par la requête, avec le mdp hash enregistré dans notre user
@@ -50,7 +50,7 @@ exports.login = (req, res, next) => {
             .then(valid => {
                 // Si Mdp incorrect
                 if (!valid) {
-                return res.status(401).json({ error: 'Mot de passe incorrect !' })
+                return res.status(401).json('Mot de passe incorrect !' )
                 }
                 // Si Mdp correct, renvoyer un user._id + un token
                 res.status(200).json({
@@ -68,8 +68,8 @@ exports.login = (req, res, next) => {
                     )
                 })
             })
-            .catch(error => res.status(500).json({ error }))
+            .catch(error => res.status(500).json( error ))
     })
 
-    .catch(error => res.status(500).json({ error }))
+    .catch(error => res.status(500).json( error ))
 }

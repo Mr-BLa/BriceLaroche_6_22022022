@@ -43,16 +43,11 @@ const app = express()
 
 
 // Middleware général, pour permettre à l'app, d'accéder à l'API sans problèmes
-/*app.use((req, res, next) => {
-    //accéder à notre API depuis n'importe quelle origine ( '*' )
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    //ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.)
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization')
-    //envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.)
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
-    next()
-})*/
-app.use(cors())
+
+const corsOptions ={
+    origin:'http://127.0.0.1:8081'
+}
+app.use(cors(corsOptions))
 
 // Pour gérer la requête POST venant de l'application front-end, on a besoin d'en extraire le corps JSON
 app.use(express.json())
