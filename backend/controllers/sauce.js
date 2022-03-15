@@ -23,7 +23,7 @@ exports.createLikeSauce = (req, res, next) => {
             (sauce) => {
                 // Si Id de l'utilisateur n'est pas dans le tableau des personnes qui ont déjà liké et que Like = 1 DONC likes = +1 
                 if (like === 1){
-                    if (!sauce.usersLiked.includes(userId)) {
+                    if (!sauce.usersLiked.includes(userId) || !sauce.usersDisliked.includes(userId)) {
                         console.log("userId absent de [usersLiked] et userId aime la sauce")
                         
                         // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [likes] à 1 et de'$push' pour l'ajout de userId ds [usersLiked]
@@ -35,7 +35,7 @@ exports.createLikeSauce = (req, res, next) => {
 
                 // Si Id de l'utilisateur n'est pas dans le tableau des personnes qui ont déjà disliké et que Dislike = -1 DONC dislikes = -1 
                 if (like === -1){
-                    if (!sauce.usersDisliked.includes(userId)) {
+                    if (!sauce.usersDisliked.includes(userId) || !sauce.usersLiked.includes(userId)) {
                         console.log("userId absent de [usersDisliked] et userId n'aime pas la sauce")
 
                         // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [dislikes] à +1 et de'$push' pour l'ajout de userId ds [usersDisliked]
@@ -61,10 +61,6 @@ exports.createLikeSauce = (req, res, next) => {
                             .then(() => res.status(201).json({ message: "Ne se prononce pas" }))
                             .catch(error => res.status(400).json({ error })) 
                     }
-                    console.log(sauce.usersLiked)
-                    console.log(sauce.likes)
-                    console.log(sauce.usersDisliked)
-                    console.log(sauce.dislikes)
                 }
             })
         .catch(error => res.status(500).json({ error }))
