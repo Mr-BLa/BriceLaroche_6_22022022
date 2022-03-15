@@ -23,7 +23,7 @@ exports.createLikeSauce = (req, res, next) => {
             (sauce) => {
                 // Si Id de l'utilisateur n'est pas dans le tableau des personnes qui ont déjà liké et que Like = 1 DONC likes = +1 
                 if (like === 1){
-                    if (!sauce.usersLiked.includes(userId) || !sauce.usersDisliked.includes(userId)) {
+                    if (!sauce.usersLiked.includes(userId) && !sauce.usersDisliked.includes(userId)) {
                         console.log("userId absent de [usersLiked] et userId aime la sauce")
                         
                         // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [likes] à 1 et de'$push' pour l'ajout de userId ds [usersLiked]
@@ -35,7 +35,7 @@ exports.createLikeSauce = (req, res, next) => {
 
                 // Si Id de l'utilisateur n'est pas dans le tableau des personnes qui ont déjà disliké et que Dislike = -1 DONC dislikes = -1 
                 if (like === -1){
-                    if (!sauce.usersDisliked.includes(userId) || !sauce.usersLiked.includes(userId)) {
+                    if (!sauce.usersDisliked.includes(userId) && !sauce.usersLiked.includes(userId)) {
                         console.log("userId absent de [usersDisliked] et userId n'aime pas la sauce")
 
                         // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [dislikes] à +1 et de'$push' pour l'ajout de userId ds [usersDisliked]
@@ -47,14 +47,14 @@ exports.createLikeSauce = (req, res, next) => {
 
                 // Si Id de l'utilisateur est présent dans [usersLiked] ou [usersDisliked], et que le vote a été annulé, DONC likes et dislikes = 0
                 if (like === 0){
-                    if ((sauce.usersLiked.includes(userId))) {
+                    if ((sauce.usersLiked.includes(userId) && !sauce.usersDisliked.includes(userId))) {
                         console.log("userId présent dans [usersLiked] et userId ne se prononce pas")
                         // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [likes] à 0 et de'$pull' pour l'ajout de userId ds [usersliked]
                         Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: -1 }, $pull: { usersLiked: userId } })
                             .then(() => res.status(201).json({ message: "Ne se prononce pas" }))
                             .catch(error => res.status(400).json({ error })) 
                             
-                    } else if ((sauce.usersDisliked.includes(userId))){
+                    } else if ((sauce.usersDisliked.includes(userId) && !sauce.usersLiked.includes(userId))){
                         console.log("userId présent dans [usersDisliked] et userId ne se prononce pas")
                         // Mise à jour de la sauce dans la base de données + Utilisation de'$inc' de mongoDB pour l'incrémentation de [dislikes] à 0 et de'$pull' pour l'ajout de userId ds [usersliked]
                         Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: +1 }, $pull: { usersDisliked: userId } })
