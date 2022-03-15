@@ -5,6 +5,10 @@
 
 // Objet http qui permet de créer serveur
 const http = require('http')
+
+//Import dotenv + var config
+require("dotenv").config()
+
 // Import application 
 const app = require('./app')
 

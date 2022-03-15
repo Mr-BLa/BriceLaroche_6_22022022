@@ -91,6 +91,7 @@ exports.createSauce = (req, res, next) => {
 
 // Controller PUT
 exports.modifySauce = (req, res, next) => {
+    const userId = req.auth.userId
     // Création objet sauceObject qui regarde si req.file existe ou non. S'il existe, on traite la nouvelle image ; s'il n'existe pas, on traite simplement l'objet entrant. On crée ensuite une instance Sauce à partir de sauceObject , puis on effectue la modification.
     const sauceObject = req.file ?
     {
@@ -98,8 +99,8 @@ exports.modifySauce = (req, res, next) => {
         //On traite la nouvelle image 
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body }
-    // Mettre à jour/ modifier une sauce dans la base de données, en fonction de l'id
-    Sauce.updateOne({ _id: req.params.id }, {...sauceObject, _id: req.params.id })
+    // Mettre à jour/ modifier une sauce dans la base de données, en fonction de l'id et si userId du créateur est le même que celui du modificateur
+    Sauce.updateOne({ _id: req.params.id , userId: userId}, {...sauceObject, _id: req.params.id })
         .then(() => res.status(200).json({ message: "Objet Modifié !"}))
         .catch(error => res.status(400).json({ error }))
 }

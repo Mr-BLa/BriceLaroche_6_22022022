@@ -62,7 +62,7 @@ exports.login = (req, res, next) => {
                         // Objet avec l'userId qui est l'identifiant utilisateur (donc vérification que la requête correspond bien à l'userId)
                         { userId: user._id },
                         // Clé secrète pour encodage
-                        "RANDOM_TOKEN_SECRET",
+                        process.env.SECRET_KEY,
                         // Expiration du TOKEN à 24h
                         { expiresIn: "24h" }
                     )
